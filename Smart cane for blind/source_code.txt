@@ -1,0 +1,49 @@
+#include <HCSR04.h>
+
+#define trig1 8      
+#define echo1 9          
+#define buzz 13
+
+void setup()
+  {
+   Serial.begin (9600);
+   pinMode(trig1, OUTPUT);
+   pinMode(echo1, INPUT);
+   pinMode(buzz, OUTPUT);
+  }
+
+void loop() 
+{
+  //Water sensor...
+  int value = analogRead(A0);
+  if (value > 500)
+   {
+    digitalWrite (buzz,HIGH);
+    Serial.print("Value of water sensor:");
+    Serial.print(value);
+    Serial.println();
+   }
+  else 
+   {
+   digitalWrite (buzz,LOW);
+   delay(100);
+   }
+  
+  //Distance sensor...
+   int duration1, distance1;
+   digitalWrite(trig1, HIGH);
+   delayMicroseconds(1000);
+   digitalWrite(trig1, LOW);
+   duration1 = pulseIn(echo1, HIGH);
+   distance1 = (duration1/2) / 29.1;
+  
+   if (distance1 >= 3 && distance1 <= 200)
+   {
+    Serial.print("Distance is : ");
+    Serial.print(distance1);
+    Serial.print(" cm");
+    Serial.println();
+    digitalWrite(buzz, HIGH);
+   }
+   delay(50);
+}
